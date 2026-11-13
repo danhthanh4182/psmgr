@@ -12,6 +12,24 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction SilentlyCon
 # The deploy repository (this project). The deploy repo and a user's data repository are two
 # separate repositories, so profile backups — which hold personal data — never target it: not
 # by implicit resolution, not via -Repo, and not even while it is private.
+
+function Get-PSManagerBackupDir {
+    <#
+    .SYNOPSIS
+        Per-user directory that holds profile backup archives.
+    .DESCRIPTION
+        Defaults to %LOCALAPPDATA%\PSManager\backups (same state root as notifications.json).
+        Never the repository or install tree: a clone may live under a junction that Windows
+        rejects as an untrusted mount point, and an installed copy must not write into its
+        own program directory. Override with $env:PSMGR_BACKUP_DIR.
+    #>
+    [CmdletBinding()]
+    [OutputType([string])]
+    param()
+
+    if (-not [string]::IsNullOrWhiteSpace($env:PSMGR_BACKUP_DIR)) { return $env:PSMGR_BACKUP_DIR }
+    return (Join-Path $env:LOCALAPPDATA 'PSManager\backups')
+}
 $Script:PSMANAGER_APP_REPO = 'danhthanh4182/psmgr'
 
 function ConvertTo-PSManagerRepoSlug {
@@ -159,7 +177,7 @@ function Backup-PSManagerProfiles {
     $defaultBackupDir = if (-not [string]::IsNullOrEmpty($DestinationDir)) {
         $DestinationDir
     } else {
-        Join-Path $env:USERPROFILE "tools\ps-manager\backups"
+        Get-PSManagerBackupDir
     }
 
     if (-not (Test-Path -LiteralPath $defaultBackupDir)) {
@@ -622,7 +640,7 @@ function Get-PSManagerBackups {
     $dir = if (-not [string]::IsNullOrEmpty($DestinationDir)) {
         $DestinationDir
     } else {
-        Join-Path $env:USERPROFILE "tools\ps-manager\backups"
+        Get-PSManagerBackupDir
     }
 
     if (-not (Test-Path -LiteralPath $dir)) {
@@ -668,7 +686,7 @@ function Remove-PSManagerBackup {
     $dir = if (-not [string]::IsNullOrEmpty($DestinationDir)) {
         $DestinationDir
     } else {
-        Join-Path $env:USERPROFILE "tools\ps-manager\backups"
+        Get-PSManagerBackupDir
     }
 
     $result = [pscustomobject]@{

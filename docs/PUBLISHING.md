@@ -1,10 +1,12 @@
 # Publishing this repository (`danhthanh4182/psmgr`)
 
-The repository stays **private** today. This checklist is the gate to run *before* flipping it
-to public: a public repo exposes the git history **and every release asset**, and some app
-features can accidentally push personal data into this repo.
+**Status: completed 2026-11-14** — the repository is public and GitHub Pages is live at
+`https://<owner>.github.io/psmgr/`. Keep this file as the checklist for any future flip (a fork,
+or if the repository is ever made private again): a public repo exposes the git history **and
+every release asset**, and some app features can accidentally push personal data into it.
 
-Everything below is ordered. Do not skip step 1 — it is the only irreversible one.
+Known residual: unreachable pre-rewrite commits (`e4ee31e`, `064521f`) are still fetchable by
+SHA until GitHub Support purges them; request that purge if the exposure matters.
 
 ---
 

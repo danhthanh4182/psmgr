@@ -31,10 +31,9 @@ When users install modern PowerShell 7 (`pwsh`), Windows continues routing tradi
 `install.ps1` resolves a release, verifies the installer digest against the published
 `SHA256SUMS.txt`, and installs it. It runs on Windows PowerShell 5.1 and PowerShell 7 alike.
 
-> **Private repository:** the release assets are not publicly reachable yet, so every method needs
-> an authenticated request. Either run `gh auth login` once, or export `PSMGR_GITHUB_TOKEN`, or pass
-> `-Token`. The direct script download and bare `winget` forms become credential-free once the repository is
-> public; the same commands then work unchanged.
+> **Public repository:** release assets and `install.ps1` download anonymously — no token or
+> `gh auth login` is required. `-Token` / `PSMGR_GITHUB_TOKEN` remain supported for rate limits
+> and private forks.
 
 > **Pin the bootstrapper when you can.** The `.../main/install.ps1` one-liners execute whatever
 > is on `main` at that moment. For reproducible installs download `install.ps1` from a release tag
@@ -44,22 +43,22 @@ When users install modern PowerShell 7 (`pwsh`), Windows continues routing tradi
 ### 1. Windows PowerShell 5.1
 
 ```powershell
-# Authenticated (works today): read install.ps1 from the private repo, then run it
-powershell -NoProfile -ExecutionPolicy Bypass -Command "gh api repos/danhthanh4182/psmgr/contents/install.ps1 -H 'Accept: application/vnd.github.raw' | Set-Content -Path $env:TEMP\psmgr-install.ps1 -Encoding UTF8; & $env:TEMP\psmgr-install.ps1 -Silent"
-
 # Public repository (one-liner)
 Invoke-RestMethod -Uri "https://raw.githubusercontent.com/danhthanh4182/psmgr/main/install.ps1" -OutFile "$env:TEMP\install.ps1"; powershell -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\install.ps1"
+
+# Optional authenticated variant (private forks / rate limits)
+powershell -NoProfile -ExecutionPolicy Bypass -Command "gh api repos/danhthanh4182/psmgr/contents/install.ps1 -H 'Accept: application/vnd.github.raw' | Set-Content -Path $env:TEMP\psmgr-install.ps1 -Encoding UTF8; & $env:TEMP\psmgr-install.ps1 -Silent"
 ```
 
 ### 2. PowerShell 7 (`pwsh`)
 
 ```powershell
-# Authenticated (works today)
-gh api repos/danhthanh4182/psmgr/contents/install.ps1 -H "Accept: application/vnd.github.raw" | Out-File "$env:TEMP\psmgr-install.ps1" -Encoding utf8
-pwsh -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\psmgr-install.ps1" -Silent
-
 # Public repository (one-liner)
 Invoke-RestMethod -Uri "https://raw.githubusercontent.com/danhthanh4182/psmgr/main/install.ps1" -OutFile "$env:TEMP\install.ps1"; pwsh -NoProfile -File "$env:TEMP\install.ps1"
+
+# Optional authenticated variant
+gh api repos/danhthanh4182/psmgr/contents/install.ps1 -H "Accept: application/vnd.github.raw" | Out-File "$env:TEMP\psmgr-install.ps1" -Encoding utf8
+pwsh -NoProfile -ExecutionPolicy Bypass -File "$env:TEMP\psmgr-install.ps1" -Silent
 ```
 
 ### 3. winget
@@ -77,8 +76,7 @@ the verified SHA256 digest, and hands it to winget. Generate it without installi
 winget install -m "$env:TEMP\danhthanh4182.PSManager.yaml" --accept-package-agreements --accept-source-agreements
 ```
 
-winget cannot authenticate to a private repository, so `-Method Winget` works once the release
-assets are public (or when the manifest points at a mirror you host).
+winget installs anonymously from the public release assets; no authentication is needed.
 
 ### Installer options
 
@@ -168,7 +166,7 @@ bundles, release archives, an Inno Setup installer, and signature verification.
 ```powershell
 Import-Module ./build/PSManager.Builder.psm1
 New-PSManagerLauncher -Destination C:\temp\app -Name psmgr.exe -ScriptName ps-manager.ps1 -Kind Console
-New-PSManagerBuildPackage -Destination C:\temp\dist -Version 1.8.0
+New-PSManagerBuildPackage -Destination C:\temp\dist -Version 1.8.1
 New-PSManagerInstaller -Destination C:\temp\dist
 Test-PSManagerSignature -Path C:\temp\dist\psmgr.exe -ExpectedThumbprint <thumbprint>
 ```
@@ -313,6 +311,7 @@ background check only ever caches a release and raises one notification per vers
 | `PSMGR_DISABLE_UPDATE_CHECK=1` | Never contact GitHub; the UI renders the cached status as "disabled". |
 | `PSMGR_DISABLE_TOASTS=1` | Keep in-app notifications but skip native Windows toasts. |
 | `PSMGR_STATE_DIR=<path>` | Store `notifications.json` and `updates.json` somewhere else (tests, portable runs). |
+| `PSMGR_BACKUP_DIR=<path>` | Profile backup directory; defaults to `%LOCALAPPDATA%\PSManager\backups`. |
 | `PSMGR_GITHUB_TOKEN=<token>` | Release check and asset download (update/install); precedence `-Token` → `PSMGR_GITHUB_TOKEN` → `GH_TOKEN` → `GITHUB_TOKEN` → `gh auth token`. |
 | `PSMGR_CLOUD_TOKEN=<token>` | `backup-cloud` only: used when the GUI/TUI token field is empty. Precedence `-Token`/field → `PSMGR_CLOUD_TOKEN` → `GH_TOKEN` → `GITHUB_TOKEN` → `gh auth login`. |
 | `PSMGR_CLOUD_REPO=<owner/repo>` | Cloud backup target; wins over `cloudRepo`, the git remote and `gh` (no `config.json` edit needed). |
@@ -336,7 +335,7 @@ The workflow builds a Pages artifact on `site/**` changes, but the deploy job on
 repository variable `PSMGR_PAGES_ENABLED` is `true`. Publication is intentionally skipped for now;
 the prerequisites live in [`docs/PUBLISHING.md`](docs/PUBLISHING.md).
 
-Website: <https://danhthanh4182.github.io/psmgr/> (live once Pages is enabled and the repository is public).
+Website: <https://danhthanh4182.github.io/psmgr/> (live).
 
 Publishing the repository is **not** just a visibility toggle: `psmgr adopt` copies live profiles
 into the tracked payload templates, so run it only inside a private dotfiles repository. Profile
@@ -354,7 +353,7 @@ PSManager is engineered according to **PowerShell Module Best Practices** and **
 tools/ps-manager/
 ├── AGENTS.md                      # Universal Agent Instructions & Guardrails (Root SSoT)
 ├── CHANGELOG.md                   # Semantic version history (Keep a Changelog)
-├── PSManager.psd1                 # Module Manifest (v1.8.0, Approved Verbs, Exports)
+├── PSManager.psd1                 # Module Manifest (v1.8.1, Approved Verbs, Exports)
 ├── install.ps1                    # Release installer (digest-verified; Installer or winget method)
 ├── PSManager.psm1                 # Root Module Loader & API Dispatcher
 ├── ps-manager.ps1                 # CLI & TUI Executable Harness (Tri-Interface SSoT)

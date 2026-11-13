@@ -5,7 +5,7 @@
 
 @{
     RootModule = 'PSManager.psm1'
-    ModuleVersion = '1.8.0'
+    ModuleVersion = '1.8.1'
     CompatiblePSEditions = @('Desktop', 'Core')
     GUID = 'a7b8e1f2-9c3d-4e5f-a6b7-8c9d0e1f2a3b'
     Author = 'Thanh'

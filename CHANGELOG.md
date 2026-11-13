@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.8.1] - 2026-11-14
+
+### Fixed
+- **Backup directory no longer targets a developer path (`modules/Sync/Backup.ps1`)**: the default archive folder was `%USERPROFILE%\tools\ps-manager\backups`. On a clone reached through a directory junction Windows now rejects it with *"The path cannot be traversed because it contains an untrusted mount point"*, and an installed copy must not write into its own program directory. `Get-PSManagerBackupDir` defaults to `%LOCALAPPDATA%\PSManager\backups` (same root as `notifications.json`); override with `PSMGR_BACKUP_DIR`. `Backup-PSManagerProfiles`, `Get-PSManagerBackups` and `Remove-PSManagerBackup` all use it.
+
+### Changed
+- **Repository is public and GitHub Pages is live**: installs and releases download anonymously, the landing page is served at `https://<owner>.github.io/psmgr/`, and the docs/site copy no longer describe a private preview. Actions runs, artifacts and the old releases/tags were purged before the flip, and main is a single clean commit with noreply authorship.
+
+---
+
 ## [1.8.0] - 2026-11-14
 
 ### Added

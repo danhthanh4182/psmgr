@@ -156,7 +156,23 @@ try {
         throw "Restore of tampered ciphertext unexpectedly succeeded - HMAC check is broken"
     }
 
-    # Test 10: cloud repo resolution, normalization and the app-repo safety guard.
+
+
+    # Test 9b: the default backup directory is per-user, never the repo/install tree,
+    # because a clone can live under a junction Windows rejects as an untrusted mount point.
+    $defaultDir = Get-PSManagerBackupDir
+    if ($defaultDir -notlike (Join-Path $env:LOCALAPPDATA 'PSManager\backups')) {
+        throw ("Default backup dir is not the per-user state root: {0}" -f $defaultDir)
+    }
+    $env:PSMGR_BACKUP_DIR = (Join-Path $TempDir 'override-backups')
+    try {
+        if ((Get-PSManagerBackupDir) -ne $env:PSMGR_BACKUP_DIR) { throw 'PSMGR_BACKUP_DIR override ignored' }
+    } finally {
+        $env:PSMGR_BACKUP_DIR = $null
+    }
+
+    # Test 10: cloud repo resolution, normalization and the deploy-repo guard.
+
     # Stubs keep the checks offline: `gh`/`git` are plain functions, so no process runs and
     # every call is recorded, which also proves that a refused target never reaches an upload.
     $script:GhCalls = [System.Collections.Generic.List[string]]::new()

@@ -46,7 +46,7 @@ PSManager (`psmgr`) is a production-grade PowerShell management and machine sync
 tools/ps-manager/
 ├── AGENTS.md                      # Universal agent instructions & guardrails (Root SSoT)
 ├── CHANGELOG.md                   # Semantic version history (Keep a Changelog)
-├── PSManager.psd1                 # Module manifest (v1.8.0, exports & metadata)
+├── PSManager.psd1                 # Module manifest (v1.8.1, exports & metadata)
 ├── install.ps1                    # Release installer (digest-verified; Installer or winget method)
 ├── PSManager.psm1                 # Root loader & public API dispatcher
 ├── ps-manager.ps1                 # CLI & TUI entrypoint harness (Tri-Interface Parity)

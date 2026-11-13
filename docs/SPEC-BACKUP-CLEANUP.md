@@ -9,7 +9,7 @@
 ## 1. Problem
 
 `psmgr backup` / `psmgr backup-cloud` accumulate archives both locally
-(`~/tools/ps-manager/backups/profile_backup_*.zip[.enc]`) and as GitHub
+(`%LOCALAPPDATA%\PSManager\backups\profile_backup_*.zip[.enc]`) and as GitHub
 Releases. There was no supported way to delete them, forcing users into manual
 `Remove-Item` / `gh release delete` with no guardrails.
 

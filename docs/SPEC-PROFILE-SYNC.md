@@ -110,7 +110,7 @@ When setting up a clean Windows machine or syncing configurations across multipl
   - Apply link mappings from `manifest.json`.
   - Configure environment variables.
 - **`psmgr backup`**:
-  - Archive active profiles and configs into a timestamped `.zip` bundle under `~/tools/ps-manager/backups/`.
+  - Archive active profiles and configs into a timestamped `.zip` bundle under `%LOCALAPPDATA%\PSManager\backups\`.
   - Supports passphrase-based Encrypt-then-MAC (`psmgr backup enc`: AES-256-CBC + HMAC-SHA256, 100k PBKDF2 rounds, `.zip.enc`).
   - Supports Windows DPAPI mode (`psmgr backup dpapi`: `System.Security.Cryptography.ProtectedData`, current-user machine bound).
 - **`psmgr backup-cloud`**:

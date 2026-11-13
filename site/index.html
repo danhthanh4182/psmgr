@@ -33,7 +33,7 @@
   "description": "Windows PowerShell version manager with a CLI, a TUI and a native WPF desktop app.",
   "operatingSystem": "Windows 10, Windows 11",
   "applicationCategory": "DeveloperApplication",
-  "softwareVersion": "1.8.0",
+  "softwareVersion": "1.8.1",
   "offers": {
     "@type": "Offer",
     "price": "0",
@@ -344,7 +344,7 @@
 
         <div class="install-panel" id="panel-winget" role="tabpanel" aria-labelledby="tab-winget">
           <div class="code-block" data-copy-scope>
-            <pre><code id="cmd-winget">winget install --id danhthanh4182.PSManager -e --source winget</code></pre>
+            <pre><code id="cmd-winget">.\install.ps1 -Method Winget -Silent</code></pre>
             <button class="copy-btn" type="button" data-copy="cmd-winget" aria-label="Copy command" data-i18n-aria-label="copy_label">
               <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="9" y="9" width="11" height="11" rx="2"/>
@@ -390,10 +390,10 @@
         <p class="install-requirements" data-i18n="install_requirements">Windows 10 or 11 with PowerShell 5.1 or later. No admin rights needed for a per-user install.</p>
 
         <aside class="note">
-          <p class="note-title" data-i18n="install_note_title">Private preview</p>
-          <p class="note-body" data-i18n="install_note_body">Until the repository is public, authenticate first so the installer can reach the release:</p>
+          <p class="note-title" data-i18n="install_note_title">Open source · MIT</p>
+          <p class="note-body" data-i18n="install_note_body">The repository and every release are public, so installs download anonymously — no account needed.</p>
           <div class="note-code" data-copy-scope>
-            <pre><code id="cmd-auth">gh auth login</code></pre>
+            <pre><code id="cmd-auth">gh auth login   # optional: private forks or API rate limits</code></pre>
             <button class="copy-btn" type="button" data-copy="cmd-auth" aria-label="Copy command" data-i18n-aria-label="copy_label">
               <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="9" y="9" width="11" height="11" rx="2"/>
@@ -403,7 +403,7 @@
             </button>
             <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
           </div>
-          <p class="note-body" data-i18n="install_note_alt">Or set PSMGR_GITHUB_TOKEN in your environment before running the installer.</p>
+          <p class="note-body" data-i18n="install_note_alt">Need a reproducible install? Pin the script to a release tag: .../raw/v1.8.1/install.ps1</p>
         </aside>
       </div>
     </div>
@@ -424,9 +424,9 @@
         </details>
 
         <details class="faq-item reveal">
-          <summary><span data-i18n="faq_q2">Can I install from a private repository?</span></summary>
+          <summary><span data-i18n="faq_q2">Do I need a GitHub account to install?</span></summary>
           <div class="faq-body">
-            <p data-i18n="faq_a2">Yes, if you have access. Run gh auth login or set PSMGR_GITHUB_TOKEN to a token that can read releases, then install again. Setting PSMGR_DISABLE_UPDATE_CHECK=1 turns the release check off entirely.</p>
+            <p data-i18n="faq_a2">No. The repository and releases are public, so the installer downloads anonymously. A token (gh auth login or PSMGR_GITHUB_TOKEN) is only useful for private forks or to raise API rate limits; PSMGR_DISABLE_UPDATE_CHECK=1 turns the release check off entirely.</p>
           </div>
         </details>
 
@@ -440,7 +440,7 @@
         <details class="faq-item reveal">
           <summary><span data-i18n="faq_q4">How do I uninstall PSManager?</span></summary>
           <div class="faq-body">
-            <p data-i18n="faq_a4">Use Settings, Apps, Installed apps, or run winget uninstall --id danhthanh4182.PSManager. User state in %LOCALAPPDATA%\PSManager is kept; delete that folder for a clean removal.</p>
+            <p data-i18n="faq_a4">Use Settings, Apps, Installed apps. User state in %LOCALAPPDATA%\PSManager is kept; delete that folder for a clean removal.</p>
           </div>
         </details>
 
@@ -478,7 +478,7 @@
         <span class="brand-word">PSManager</span>
       </a>
       <p class="footer-tagline" data-i18n="footer_tagline">A PowerShell version manager for Windows, written in PowerShell.</p>
-      <p class="footer-version"><span class="muted" data-i18n="footer_version_label">Current version</span> <strong>v1.8.0</strong></p>
+      <p class="footer-version"><span class="muted" data-i18n="footer_version_label">Current version</span> <strong>v1.8.1</strong></p>
     </div>
 
     <nav class="footer-col" aria-label="Product" data-i18n-aria-label="footer_product">
