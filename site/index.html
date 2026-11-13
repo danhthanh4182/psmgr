@@ -344,7 +344,7 @@
 
         <div class="install-panel" id="panel-winget" role="tabpanel" aria-labelledby="tab-winget">
           <div class="code-block" data-copy-scope>
-            <pre><code id="cmd-winget">.\install.ps1 -Method Winget -Silent</code></pre>
+            <pre><code id="cmd-winget">irm https://raw.githubusercontent.com/danhthanh4182/psmgr/main/install.ps1 -OutFile .\install.ps1; .\install.ps1 -Method Winget -Silent</code></pre>
             <button class="copy-btn" type="button" data-copy="cmd-winget" aria-label="Copy command" data-i18n-aria-label="copy_label">
               <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="9" y="9" width="11" height="11" rx="2"/>
