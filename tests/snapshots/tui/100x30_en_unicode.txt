@@ -1,0 +1,30 @@
+﻿┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ PSManager v1.4.0                                                                English   ? help │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│  Default shell  ● PowerShell 7                    Source  ● winget · stable                      │
+│  Host app  ● Windows Terminal                     Shim  ● pwsh active                            │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                 █│
+│ ◆ Default shell                                                                                 █│
+│› ↺ Set PowerShell 7 as Default (1-Click Apply All)                                         [d]  █│
+│  ↺ Restore Windows PowerShell 5.1 as Default                                               [r]  █│
+│ ▸ Quick launch                                                                                  █│
+│    Launch PowerShell 7 (Standard Window / Tab)                                             [6]  █│
+│    Launch PowerShell 7 as Administrator                                                    [7]  █│
+│    Launch Side-by-Side (PS7 + PS5 Split View)                                              [8]  █│
+│    Launch Windows PowerShell 5.1                                                           [9]  █│
+│ ↻ Update & maintenance                                                                          █│
+│    Update PowerShell 7 (Via Active Source)                                                 [u]  █│
+│    Install / Reinstall PowerShell 7                                                        [i]  █│
+│  ↺ Configure Update Source & Channel (Winget / MSStore / GitHub)                           [c]  █│
+│  ↺ Profile Sync & Multi-Package Provisioning                                               [y]  ░│
+│    Sync Winget Sources                                                                     [w]  ░│
+│ ▣ Backup & restore                                                                              ░│
+│    Backup Profiles                                                                         [b]  ░│
+│  ↺ Restore Backup                                                                          [k]  ░│
+│    Backup to Cloud                                                                         [n]  ░│
+│  ▼ more                                                                                         ░│
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│  Configures WT profile, Windows default terminal, PATH shim, context menu & VSCode               │
+│↑↓ navigate   Enter select   / find   Tab group   g GUI   l language   ? help   q exit            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘

@@ -1,0 +1,40 @@
+﻿┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ PSManager v1.4.0                                                                             Tiếng Việt   ? trợ giúp │
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│  Shell mặc định  ● PowerShell 7                             Nguồn  ● winget · stable                                 │
+│  Terminal  ● Windows Terminal                               Shim  ● pwsh đang bật                                    │
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                    █│  Đặt PowerShell 7 làm Mặc định (1-Click Áp dụng tất cả)        │
+│ ◆ Cấu hình shell mặc định                          █│                                                                │
+│› ↺ Đặt PowerShell 7 làm Mặc định (1-Click Áp  [d]  █│  Cấu hình WT profile, Windows Terminal host, PATH shim,        │
+│    dụng tất cả)                                    █│  context menu & VSCode                                         │
+│  ↺ Khôi phục Windows PowerShell 5.1 làm Mặc   [r]  █│                                                                │
+│    định                                            █│    Cần quyền Admin   không                                     │
+│ ▸ Mở nhanh                                         █│    Hoàn tác được     Khôi phục PS5 (r)                         │
+│    Khởi chạy PowerShell 7 (Cửa sổ / Tab mới)  [6]  █│                                                                │
+│    Khởi chạy PowerShell 7 với quyền Quản trị  [7]  █│  Enter  xem trước thay đổi và thực thi                         │
+│    (Admin)                                         █│                                                                │
+│    Mở song song chia đôi màn hình (PS7 + PS5) [8]  █│                                                                │
+│    Khởi chạy Windows PowerShell 5.1           [9]  █│                                                                │
+│ ↻ Cập nhật & bảo trì                               █│                                                                │
+│    Cập nhật PowerShell 7 (Qua nguồn đang kích [u]  █│                                                                │
+│    hoạt)                                           █│                                                                │
+│    Cài đặt / Cài lại PowerShell 7             [i]  █│                                                                │
+│  ↺ Cấu hình Nguồn & Kênh Cập nhật (Winget /   [c]  █│                                                                │
+│    MSStore / GitHub)                               █│                                                                │
+│  ↺ Đồng bộ Profile & Tự cài Gói Công cụ (Sync) [y] █│                                                                │
+│    Đồng bộ Nguồn Winget                       [w]  █│                                                                │
+│ ▣ Sao lưu & khôi phục                              █│                                                                │
+│    Backup Profiles                            [b]  █│                                                                │
+│  ↺ Phục hồi Backup                            [k]  █│                                                                │
+│    Backup lên Cloud                           [n]  █│                                                                │
+│    Đặt repo backup                            [j]  █│                                                                │
+│  ! Xóa Backup Trên Máy (Nguy hiểm)            [x]  █│                                                                │
+│ ✚ Sức khỏe & profile                               █│                                                                │
+│    Kiểm tra Môi trường (Doctor Audit)         [o]  ░│                                                                │
+│    Kiểm tra Phiên bản & Chẩn đoán Chi tiết    [z]  ░│                                                                │
+│  ↺ Kiểm tra & Sửa Profile (PS 5.1 & PS 7)     [t]  ░│                                                                │
+│  ▼ còn tiếp                                        ░│                                                                │
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│↑↓ di chuyển   Enter chọn   / tìm   Tab nhóm   g GUI   l ngôn ngữ   ? trợ giúp   q thoát                              │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘

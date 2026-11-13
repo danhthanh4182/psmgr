@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# PSManager Pre-Push Hook
+# Fast gate: executes AST syntax linting, manifest, parity contract & automation invariants.
+# ==============================================================================
+
+# 1. Check stdin: skip validation if deleting a branch or no new commits
+HAS_REFS=0
+HAS_NEW=0
+while read -r local_ref local_sha remote_ref remote_sha; do
+    HAS_REFS=1
+    if [ -n "$local_sha" ] && [ "$local_sha" != "0000000000000000000000000000000000000000" ] && [ "$local_sha" != "(delete)" ]; then
+        if [ "$local_sha" != "$remote_sha" ]; then
+            HAS_NEW=1
+        fi
+    fi
+done
+
+if [ "$HAS_REFS" -eq 1 ] && [ "$HAS_NEW" -eq 0 ]; then
+    echo "No new commits to push. Skipping pre-push tests."
+    exit 0
+fi
+
+echo "==> Running PSManager Pre-Push Validation Suite..."
+
+# 2. Verify CHANGELOG.md and core documentation exist and are tracked
+if [ ! -f "CHANGELOG.md" ] || ! git ls-files --error-unmatch CHANGELOG.md >/dev/null 2>&1; then
+    echo "❌ Pre-push validation failed: CHANGELOG.md is missing or not tracked in git!" >&2
+    exit 1
+fi
+
+# 3. Fast hook profile: skip heavy C# launcher & installer builds during push (CI builds releases)
+export PSMGR_SKIP_BUILDER_TESTS="${PSMGR_SKIP_BUILDER_TESTS:-1}"
+if command -v pwsh >/dev/null 2>&1; then
+    pwsh -NoProfile -ExecutionPolicy Bypass -File tests/Run-Tests.ps1 -Fast
+elif command -v pwsh.exe >/dev/null 2>&1; then
+    pwsh.exe -NoProfile -ExecutionPolicy Bypass -File tests/Run-Tests.ps1 -Fast
+elif command -v powershell.exe >/dev/null 2>&1; then
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File tests/Run-Tests.ps1 -Fast
+elif command -v powershell >/dev/null 2>&1; then
+    powershell -NoProfile -ExecutionPolicy Bypass -File tests/Run-Tests.ps1 -Fast
+else
+    echo "PowerShell not found. Skipping hook."
+    exit 0
+fi
+
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+    echo "❌ Pre-push validation failed! Push rejected."
+    exit 1
+fi
+
+echo "✅ Pre-push validation passed. Pushing to remote..."
+exit 0

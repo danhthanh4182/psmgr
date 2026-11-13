@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json.schemastore.org/mcp.json",
+  "comment": "Copy the relevant block below into your MCP client's configuration file.",
+  "note": "Replace C:\\path\\to\\psmgr with your clone path. MCP hosts pass args literally and do not expand %VARS%.",
+  "claude_desktop": {
+    "file": "%APPDATA%\\Claude\\claude_desktop_config.json",
+    "mcpServers": {
+      "psmgr-builder": {
+        "command": "pwsh.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "C:\\path\\to\\psmgr\\build\\mcp-server.ps1"
+        ]
+      }
+    }
+  },
+  "vscode_cursor": {
+    "file": ".vscode/mcp.json or .cursor/mcp.json",
+    "mcpServers": {
+      "psmgr-builder": {
+        "command": "pwsh.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}/build/mcp-server.ps1"
+        ]
+      }
+    }
+  },
+  "generic_stdio": {
+    "command": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "<repo>/build/mcp-server.ps1"
+    ],
+    "notes": "Compatible with any MCP host supporting stdio transport (Claude Desktop, VS Code, Cursor, Orca, Pi, OMP, Codex, OpenCode)."
+  }
+}

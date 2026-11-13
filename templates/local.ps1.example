@@ -1,0 +1,12 @@
+# ==============================================================================
+# PSManager Machine-Local Profile Overrides
+# Copy this file to "local.ps1" in your profile directory for host-specific items.
+# NOTE: Do NOT commit local.ps1 to Git!
+# ==============================================================================
+
+# Private Environment Variables & API Keys
+# $env:OPENAI_API_KEY = "sk-..."
+# $env:GITHUB_TOKEN   = "ghp_..."
+
+# Machine-Specific Aliases
+# function work-vpn { & "C:\Program Files\Cisco\vpn.exe" connect }

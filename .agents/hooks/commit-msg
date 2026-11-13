@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# PSManager Commit-Msg Hook
+# Enforces Conventional Commits standard across all human and agent commits.
+# ==============================================================================
+
+MSG_FILE="$1"
+FIRST_LINE=$(head -n 1 "$MSG_FILE")
+
+# Allow merge commits or fixup commits
+if [[ "$FIRST_LINE" =~ ^Merge ]] || [[ "$FIRST_LINE" =~ ^(fixup|squash)! ]]; then
+    exit 0
+fi
+
+# Conventional Commits regex pattern
+CONVENTIONAL_REGEX="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9._-]+\))?!?: .+"
+
+if [[ ! "$FIRST_LINE" =~ $CONVENTIONAL_REGEX ]]; then
+    echo "❌ ERROR: Commit message does not follow Conventional Commits specification!" >&2
+    echo "" >&2
+    echo "  Your message: \"$FIRST_LINE\"" >&2
+    echo "" >&2
+    echo "  Expected format:" >&2
+    echo "    <type>(<scope>): <short description>" >&2
+    echo "" >&2
+    echo "  Allowed types:" >&2
+    echo "    feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert" >&2
+    echo "" >&2
+    echo "  Examples:" >&2
+    echo "    feat(sync): add safe hardlink fallback" >&2
+    echo "    fix(doctor): resolve missing app recommendation" >&2
+    echo "    docs: update AGENTS.md guardrails" >&2
+    exit 1
+fi
+
+# ==============================================================================
+# Documentation & Changelog Guardrail
+# Commits with type 'feat' or 'fix' that modify code must include CHANGELOG.md.
+# ==============================================================================
+if [[ "$FIRST_LINE" =~ ^(feat|fix)(\([a-zA-Z0-9._-]+\))?!?: ]]; then
+    STAGED_FILES=$(git diff --cached --name-only)
+    HAS_CODE_CHANGES=$(echo "$STAGED_FILES" | grep -E '\.(ps1|psm1|psd1|json)$')
+    if [ -n "$HAS_CODE_CHANGES" ]; then
+        if ! echo "$STAGED_FILES" | grep -q "CHANGELOG.md"; then
+            echo "" >&2
+            echo "❌ GUARDRAIL ERROR: Commits with type 'feat' or 'fix' that modify code must also update CHANGELOG.md!" >&2
+            echo "" >&2
+            echo "  Staged code files:" >&2
+            echo "$HAS_CODE_CHANGES" | sed 's/^/    - /' >&2
+            echo "" >&2
+            echo "  Please update and stage CHANGELOG.md before committing, or use an appropriate commit type (chore, refactor, docs, test, ci)." >&2
+            exit 1
+        fi
+    fi
+fi
+
+exit 0

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PSManager — One command. PowerShell 7 everywhere.</title>
+<meta name="description" content="PSManager is a Windows PowerShell version manager: set PS7 as the default shell, sync profiles and manage backups, updates and diagnostics from a CLI, TUI or native desktop app.">
+<link rel="canonical" href="https://danhthanh4182.github.io/psmgr/">
+<meta name="theme-color" content="#07101F">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/site.css">
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PSManager">
+<meta property="og:title" content="PSManager — One command. PowerShell 7 everywhere.">
+<meta property="og:description" content="Set PS7 as the default shell, keep profiles in sync, and manage backups, updates and diagnostics from a CLI, TUI or native desktop app.">
+<meta property="og:url" content="https://danhthanh4182.github.io/psmgr/">
+<meta property="og:image" content="https://danhthanh4182.github.io/psmgr/assets/img/og-cover.png">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="800">
+<meta property="og:image:alt" content="PSManager desktop app overview page">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="vi_VN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PSManager — One command. PowerShell 7 everywhere.">
+<meta name="twitter:description" content="A Windows PowerShell version manager with a CLI, a TUI and a native WPF app.">
+<meta name="twitter:image" content="https://danhthanh4182.github.io/psmgr/assets/img/og-cover.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "PSManager",
+  "description": "Windows PowerShell version manager with a CLI, a TUI and a native WPF desktop app.",
+  "operatingSystem": "Windows 10, Windows 11",
+  "applicationCategory": "DeveloperApplication",
+  "softwareVersion": "1.8.0",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "license": "MIT",
+  "url": "https://danhthanh4182.github.io/psmgr/",
+  "codeRepository": "https://github.com/danhthanh4182/psmgr"
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
+
+<header class="site-header" id="top">
+  <div class="container header-inner">
+    <a class="brand" href="#top" aria-label="PSManager home" data-i18n-aria-label="brand_home">
+      <svg class="brand-mark" viewBox="0 0 32 32" width="28" height="28" aria-hidden="true" focusable="false">
+        <path d="M18.6 3 7 17.4h6.4L13.4 29 25 14.6h-6.4L18.6 3Z" fill="currentColor"/>
+      </svg>
+      <span class="brand-word">PSManager</span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="Main navigation" data-i18n-aria-label="nav_label">
+      <a href="#features" data-i18n="nav_features">Features</a>
+      <a href="#interfaces" data-i18n="nav_interfaces">Interfaces</a>
+      <a href="#install" data-i18n="nav_install">Install</a>
+      <a href="#faq" data-i18n="nav_faq">FAQ</a>
+      <a class="nav-github" href="https://github.com/danhthanh4182/psmgr" rel="noopener noreferrer">
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A7.99 7.99 0 0 0 16 8c0-4.42-3.58-8-8-8Z" fill="currentColor"/>
+        </svg>
+        <span data-i18n="nav_github">GitHub</span>
+      </a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="btn btn-ghost lang-toggle" id="lang-toggle" type="button" aria-label="Switch to Vietnamese" data-i18n-aria-label="lang_toggle_label">VI</button>
+      <button class="btn btn-ghost icon-btn" id="theme-toggle" type="button" aria-label="Toggle light and dark theme" data-i18n-aria-label="theme_toggle_label">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4.2"/>
+          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4 17 7M7 17l-1.6 1.6"/>
+        </svg>
+      </button>
+      <button class="btn btn-ghost icon-btn menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation menu" data-i18n-aria-label="menu_toggle_label">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="hero_eyebrow">Windows 10/11 · PowerShell 5.1 + 7.4+</p>
+        <h1 id="hero-title" data-i18n="hero_title">One command. PowerShell 7 everywhere.</h1>
+        <p class="lead" data-i18n="hero_lead">Set PS7 as the default shell, keep profiles in sync, and manage backups, updates and diagnostics from a CLI, TUI or native desktop app.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#install" data-i18n="hero_cta_primary">Install PSManager</a>
+          <a class="btn btn-outline" href="https://github.com/danhthanh4182/psmgr" rel="noopener noreferrer" data-i18n="hero_cta_secondary">Explore the code</a>
+        </div>
+
+        <div class="terminal" data-copy-scope>
+          <div class="terminal-bar">
+            <span class="terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="terminal-label" data-i18n="hero_terminal_label">PowerShell 7</span>
+          </div>
+          <div class="terminal-body">
+            <pre><code id="hero-command">psmgr set-default ps7</code></pre>
+            <button class="copy-btn" type="button" data-copy="hero-command" aria-label="Copy command" data-i18n-aria-label="copy_label">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="11" height="11" rx="2"/>
+                <path d="M15 5.5A2.5 2.5 0 0 0 12.5 3h-6A3.5 3.5 0 0 0 3 6.5v6A2.5 2.5 0 0 0 5.5 15"/>
+              </svg>
+              <span data-i18n="copy">Copy</span>
+            </button>
+          </div>
+          <p class="terminal-note" data-i18n="hero_terminal_note">Points new terminals at PS7 and keeps every PSManager action aimed at the same shell.</p>
+          <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <figure class="hero-shot reveal">
+        <img src="assets/img/gui-overview.png" width="1280" height="820" loading="eager" decoding="async" alt="PSManager desktop app showing the Overview page with PowerShell versions, the default shell and quick actions" data-i18n-alt="hero_shot_alt">
+      </figure>
+    </div>
+  </section>
+
+  <section class="compat" aria-labelledby="compat-title">
+    <div class="container">
+      <h2 class="sr-only" id="compat-title" data-i18n="compat_label">Runs on</h2>
+      <ul class="compat-list">
+        <li><span class="compat-dot" aria-hidden="true"></span><span data-i18n="compat_win">Windows 10/11</span></li>
+        <li><span class="compat-dot" aria-hidden="true"></span><span data-i18n="compat_ps5">PowerShell 5.1</span></li>
+        <li><span class="compat-dot" aria-hidden="true"></span><span data-i18n="compat_ps7">PowerShell 7.4+</span></li>
+        <li><span class="compat-dot" aria-hidden="true"></span><span data-i18n="compat_wt">Windows Terminal</span></li>
+        <li><span class="compat-dot" aria-hidden="true"></span><span data-i18n="compat_winget">winget</span></li>
+        <li><span class="compat-dot" aria-hidden="true"></span><span data-i18n="compat_msstore">Microsoft Store</span></li>
+        <li><span class="compat-dot" aria-hidden="true"></span><span data-i18n="compat_github">GitHub Releases</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="interfaces" aria-labelledby="interfaces-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="interfaces-title" data-i18n="interfaces_title">Three interfaces, one engine</h2>
+        <p class="section-lead" data-i18n="interfaces_lead">The same PowerShell core and the same configuration, whichever way you drive it.</p>
+      </div>
+
+      <div class="interface-grid">
+        <article class="card interface-card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="16" rx="2"/>
+              <path d="m7 9 3 3-3 3M12.5 15H17"/>
+            </svg>
+          </div>
+          <h3 data-i18n="interfaces_cli_title">CLI</h3>
+          <p data-i18n="interfaces_cli_desc">Short commands for scripts and CI: status, defaults, sync, backups and updates.</p>
+          <ul class="cmd-list">
+            <li><code>psmgr status</code><span data-i18n="interfaces_cli_item_1">Environment, default shell and update status</span></li>
+            <li><code>psmgr set-default ps7</code><span data-i18n="interfaces_cli_item_2">Make PS7 or PS5.1 the default shell</span></li>
+            <li><code>psmgr sync</code><span data-i18n="interfaces_cli_item_3">Link profiles and audit the machine</span></li>
+            <li><code>psmgr update-check</code><span data-i18n="interfaces_cli_item_4">Check for and install PSManager updates</span></li>
+          </ul>
+          <a class="card-link" href="#install" data-i18n="card_cta_install">Install</a>
+        </article>
+
+        <article class="card interface-card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="16" rx="2"/>
+              <path d="M3 8h18M6.5 6h.01M9 6h.01"/>
+            </svg>
+          </div>
+          <h3 data-i18n="interfaces_tui_title">TUI</h3>
+          <p data-i18n="interfaces_tui_desc">A full-screen terminal app with keyboard navigation, search and a help overlay.</p>
+          <ul class="key-list">
+            <li><kbd>↑</kbd><kbd>↓</kbd><span data-i18n="interfaces_tui_key_move">Move between actions</span></li>
+            <li><kbd>/</kbd><span data-i18n="interfaces_tui_key_search">Search actions</span></li>
+            <li><kbd>?</kbd><span data-i18n="interfaces_tui_key_help">Open the help overlay</span></li>
+            <li><kbd>g</kbd><span data-i18n="interfaces_tui_key_gui">Launch the desktop app</span></li>
+          </ul>
+          <a class="card-link" href="#install" data-i18n="card_cta_install">Install</a>
+        </article>
+
+        <article class="card interface-card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="16" rx="2"/>
+              <path d="M3 8h18"/>
+            </svg>
+          </div>
+          <h3 data-i18n="interfaces_gui_title">GUI</h3>
+          <p data-i18n="interfaces_gui_desc">A native WPF app with six pages: Overview, Update, Backup, Health, Profile and Help.</p>
+          <img class="card-shot" src="assets/img/gui-overview.png" width="1280" height="820" loading="lazy" decoding="async" alt="PSManager desktop app Overview page" data-i18n-alt="interfaces_gui_alt">
+          <a class="card-link" href="#install" data-i18n="card_cta_install">Install</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="features" aria-labelledby="features-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="features-title" data-i18n="features_title">Everything in one control center</h2>
+        <p class="section-lead" data-i18n="features_lead">PSManager turns the things you have to remember into buttons you can press.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="card feature-card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.5 9.5 17 19 7"/>
+            </svg>
+          </div>
+          <h3 data-i18n="feature_default_title">One-click PS7 default</h3>
+          <p data-i18n="feature_default_desc">Switch the default shell between PowerShell 7 and Windows PowerShell 5.1, with Windows Terminal wired up.</p>
+        </article>
+
+        <article class="card feature-card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 19V5M6.5 10.5 12 5l5.5 5.5"/>
+            </svg>
+          </div>
+          <h3 data-i18n="feature_sources_title">Multi-source updater</h3>
+          <p data-i18n="feature_sources_desc">Install and upgrade PowerShell from winget, Microsoft Store or GitHub, on stable, preview or lts channels.</p>
+        </article>
+
+        <article class="card feature-card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 9a8 8 0 0 1 13.5-3.5L20 8M20 4.5V8h-3.5"/>
+              <path d="M20 15a8 8 0 0 1-13.5 3.5L4 16M4 19.5V16h3.5"/>
+            </svg>
+          </div>
+          <h3 data-i18n="feature_sync_title">Profile sync</h3>
+          <p data-i18n="feature_sync_desc">Link dotfiles, provision packages and let PS5.1 and PS7 share one set of profiles.</p>
+        </article>
+
+        <article class="card feature-card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 7.5h16V19H4zM8.5 7.5V5h7v2.5"/>
+            </svg>
+          </div>
+          <h3 data-i18n="feature_backup_title">Encrypted backups</h3>
+          <p data-i18n="feature_backup_desc">Pack profiles and configuration into a ZIP, optionally encrypted, and restore with one command.</p>
+        </article>
+
+        <article class="card feature-card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 4.5v15M4.5 12h15"/>
+            </svg>
+          </div>
+          <h3 data-i18n="feature_doctor_title">Doctor audit</h3>
+          <p data-i18n="feature_doctor_desc">psmgr doctor and audit-profile catch PATH problems, broken profiles and missing installs, with an optional fix.</p>
+        </article>
+
+        <article class="card feature-card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.8 2.5H4.2z"/>
+              <path d="M10 21h4"/>
+            </svg>
+          </div>
+          <h3 data-i18n="feature_updates_title">Update notifications</h3>
+          <p data-i18n="feature_updates_desc">Cached release checks, an unread badge, and a SHA-256 verified installer before anything runs.</p>
+        </article>
+
+        <article class="card feature-card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M9.6 9.2a2.6 2.6 0 1 1 3.7 2.4c-.8.4-1.3 1-1.3 1.9"/>
+              <path d="M12 17.2h.01"/>
+            </svg>
+          </div>
+          <h3 data-i18n="feature_help_title">Help center</h3>
+          <p data-i18n="feature_help_desc">One command catalog behind psmgr help, the TUI overlay and the Help page in the desktop app.</p>
+        </article>
+
+        <article class="card feature-card reveal">
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M3.5 12h17M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>
+            </svg>
+          </div>
+          <h3 data-i18n="feature_lang_title">Bilingual UI</h3>
+          <p data-i18n="feature_lang_desc">English, Vietnamese and ASCII-safe Vietnamese across the CLI, the TUI and the GUI.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="updates" aria-labelledby="updates-title">
+    <div class="container updates-grid">
+      <div class="updates-copy reveal">
+        <h2 id="updates-title" data-i18n="updates_title">Updates without surprises</h2>
+        <p class="section-lead" data-i18n="updates_lead">PSManager checks for its own releases but never installs one behind your back. You see the notice, you make the call.</p>
+
+        <div class="point-list">
+          <div class="point">
+            <h3 data-i18n="updates_point_cache_title">Six-hour cached checks</h3>
+            <p data-i18n="updates_point_cache_desc">Results land in updates.json and are reused for six hours, so startup never waits on the network.</p>
+          </div>
+          <div class="point">
+            <h3 data-i18n="updates_point_badge_title">Unread badge and native toasts</h3>
+            <p data-i18n="updates_point_badge_desc">A bell badge, an in-app notification center, and a native Windows toast when a release appears.</p>
+          </div>
+          <div class="point">
+            <h3 data-i18n="updates_point_sha_title">SHA-256 verified installer</h3>
+            <p data-i18n="updates_point_sha_desc">The installer is downloaded next to SHA256SUMS.txt and checked before it runs. No unverified path exists.</p>
+          </div>
+          <div class="point">
+            <h3 data-i18n="updates_point_confirm_title">You confirm every install</h3>
+            <p data-i18n="updates_point_confirm_desc">Nothing upgrades in the background. PSManager installs only after you click, or type y.</p>
+          </div>
+        </div>
+      </div>
+
+      <figure class="updates-shot reveal">
+        <img src="assets/img/gui-update.png" width="1280" height="820" loading="lazy" decoding="async" alt="PSManager Update page listing PowerShell versions and the package source" data-i18n-alt="updates_shot_alt">
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" id="install" aria-labelledby="install-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="install-title" data-i18n="install_title">Install PSManager</h2>
+        <p class="section-lead" data-i18n="install_lead">Pick whichever fits. All three routes ship the same installer and the same release.</p>
+      </div>
+
+      <div class="install-card reveal">
+        <div class="tabs" role="tablist" aria-label="Install methods" data-i18n-aria-label="install_tabs_label">
+          <button class="tab" id="tab-winget" type="button" role="tab" aria-selected="true" aria-controls="panel-winget" tabindex="0" data-i18n="install_tab_winget">winget</button>
+          <button class="tab" id="tab-ps7" type="button" role="tab" aria-selected="false" aria-controls="panel-ps7" tabindex="-1" data-i18n="install_tab_ps7">PowerShell 7</button>
+          <button class="tab" id="tab-ps51" type="button" role="tab" aria-selected="false" aria-controls="panel-ps51" tabindex="-1" data-i18n="install_tab_ps51">Windows PowerShell 5.1</button>
+        </div>
+
+        <div class="install-panel" id="panel-winget" role="tabpanel" aria-labelledby="tab-winget">
+          <div class="code-block" data-copy-scope>
+            <pre><code id="cmd-winget">winget install --id danhthanh4182.PSManager -e --source winget</code></pre>
+            <button class="copy-btn" type="button" data-copy="cmd-winget" aria-label="Copy command" data-i18n-aria-label="copy_label">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="11" height="11" rx="2"/>
+                <path d="M15 5.5A2.5 2.5 0 0 0 12.5 3h-6A3.5 3.5 0 0 0 3 6.5v6A2.5 2.5 0 0 0 5.5 15"/>
+              </svg>
+              <span data-i18n="copy">Copy</span>
+            </button>
+            <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
+          </div>
+          <p class="install-caption" data-i18n="install_winget_caption">Installs from the winget community repository. Run psmgr afterwards to open the terminal UI.</p>
+        </div>
+
+        <div class="install-panel" id="panel-ps7" role="tabpanel" aria-labelledby="tab-ps7" hidden>
+          <div class="code-block" data-copy-scope>
+            <pre><code id="cmd-ps7">irm https://raw.githubusercontent.com/danhthanh4182/psmgr/main/install.ps1 | iex</code></pre>
+            <button class="copy-btn" type="button" data-copy="cmd-ps7" aria-label="Copy command" data-i18n-aria-label="copy_label">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="11" height="11" rx="2"/>
+                <path d="M15 5.5A2.5 2.5 0 0 0 12.5 3h-6A3.5 3.5 0 0 0 3 6.5v6A2.5 2.5 0 0 0 5.5 15"/>
+              </svg>
+              <span data-i18n="copy">Copy</span>
+            </button>
+            <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
+          </div>
+          <p class="install-caption" data-i18n="install_ps7_caption">Run it inside PowerShell 7. The script checks the environment before downloading anything.</p>
+        </div>
+
+        <div class="install-panel" id="panel-ps51" role="tabpanel" aria-labelledby="tab-ps51" hidden>
+          <div class="code-block" data-copy-scope>
+            <pre><code id="cmd-ps51">powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/danhthanh4182/psmgr/main/install.ps1 | iex"</code></pre>
+            <button class="copy-btn" type="button" data-copy="cmd-ps51" aria-label="Copy command" data-i18n-aria-label="copy_label">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="11" height="11" rx="2"/>
+                <path d="M15 5.5A2.5 2.5 0 0 0 12.5 3h-6A3.5 3.5 0 0 0 3 6.5v6A2.5 2.5 0 0 0 5.5 15"/>
+              </svg>
+              <span data-i18n="copy">Copy</span>
+            </button>
+            <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
+          </div>
+          <p class="install-caption" data-i18n="install_ps51_caption">For the inbox Windows PowerShell 5.1 that ships with Windows 10 and 11.</p>
+        </div>
+
+        <p class="install-requirements" data-i18n="install_requirements">Windows 10 or 11 with PowerShell 5.1 or later. No admin rights needed for a per-user install.</p>
+
+        <aside class="note">
+          <p class="note-title" data-i18n="install_note_title">Private preview</p>
+          <p class="note-body" data-i18n="install_note_body">Until the repository is public, authenticate first so the installer can reach the release:</p>
+          <div class="note-code" data-copy-scope>
+            <pre><code id="cmd-auth">gh auth login</code></pre>
+            <button class="copy-btn" type="button" data-copy="cmd-auth" aria-label="Copy command" data-i18n-aria-label="copy_label">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="11" height="11" rx="2"/>
+                <path d="M15 5.5A2.5 2.5 0 0 0 12.5 3h-6A3.5 3.5 0 0 0 3 6.5v6A2.5 2.5 0 0 0 5.5 15"/>
+              </svg>
+              <span data-i18n="copy">Copy</span>
+            </button>
+            <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
+          </div>
+          <p class="note-body" data-i18n="install_note_alt">Or set PSMGR_GITHUB_TOKEN in your environment before running the installer.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq" aria-labelledby="faq-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 id="faq-title" data-i18n="faq_title">Frequently asked questions</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item reveal">
+          <summary><span data-i18n="faq_q1">Why does Windows SmartScreen warn me?</span></summary>
+          <div class="faq-body">
+            <p data-i18n="faq_a1">The installer is not code-signed yet, so SmartScreen may ask for confirmation. Choose More info, then Run anyway, after checking the SHA-256 digest against SHA256SUMS.txt in the release.</p>
+          </div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary><span data-i18n="faq_q2">Can I install from a private repository?</span></summary>
+          <div class="faq-body">
+            <p data-i18n="faq_a2">Yes, if you have access. Run gh auth login or set PSMGR_GITHUB_TOKEN to a token that can read releases, then install again. Setting PSMGR_DISABLE_UPDATE_CHECK=1 turns the release check off entirely.</p>
+          </div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary><span data-i18n="faq_q3">Does it run on Windows PowerShell 5.1?</span></summary>
+          <div class="faq-body">
+            <p data-i18n="faq_a3">Yes. Every module runs on Windows PowerShell 5.1 and PowerShell 7.4 or later, including the update check and the notification store.</p>
+          </div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary><span data-i18n="faq_q4">How do I uninstall PSManager?</span></summary>
+          <div class="faq-body">
+            <p data-i18n="faq_a4">Use Settings, Apps, Installed apps, or run winget uninstall --id danhthanh4182.PSManager. User state in %LOCALAPPDATA%\PSManager is kept; delete that folder for a clean removal.</p>
+          </div>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary><span data-i18n="faq_q5">Where do update notifications come from?</span></summary>
+          <div class="faq-body">
+            <p data-i18n="faq_a5">PSManager reads its own GitHub releases API at most once every six hours. Each check is one request; set PSMGR_DISABLE_UPDATE_CHECK=1 to disable it and PSMGR_DISABLE_TOASTS=1 to silence native toasts.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta" aria-labelledby="cta-title">
+    <div class="container">
+      <div class="cta-card reveal">
+        <h2 id="cta-title" data-i18n="cta_title">Ready to make PowerShell 7 the default?</h2>
+        <p data-i18n="cta_lead">One command gets you the CLI, the TUI and the desktop app, all sharing one manager.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#install" data-i18n="cta_primary">Install PSManager</a>
+          <a class="btn btn-outline" href="https://github.com/danhthanh4182/psmgr/tree/main/docs" rel="noopener noreferrer" data-i18n="cta_secondary">Read the docs</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a class="brand" href="#top" aria-label="PSManager home" data-i18n-aria-label="brand_home">
+        <svg class="brand-mark" viewBox="0 0 32 32" width="24" height="24" aria-hidden="true" focusable="false">
+          <path d="M18.6 3 7 17.4h6.4L13.4 29 25 14.6h-6.4L18.6 3Z" fill="currentColor"/>
+        </svg>
+        <span class="brand-word">PSManager</span>
+      </a>
+      <p class="footer-tagline" data-i18n="footer_tagline">A PowerShell version manager for Windows, written in PowerShell.</p>
+      <p class="footer-version"><span class="muted" data-i18n="footer_version_label">Current version</span> <strong>v1.8.0</strong></p>
+    </div>
+
+    <nav class="footer-col" aria-label="Product" data-i18n-aria-label="footer_product">
+      <h2 data-i18n="footer_product">Product</h2>
+      <ul>
+        <li><a href="https://github.com/danhthanh4182/psmgr" rel="noopener noreferrer" data-i18n="footer_links_github">GitHub</a></li>
+        <li><a href="https://github.com/danhthanh4182/psmgr/releases" rel="noopener noreferrer" data-i18n="footer_links_releases">Releases</a></li>
+        <li><a href="#install" data-i18n="nav_install">Install</a></li>
+      </ul>
+    </nav>
+
+    <nav class="footer-col" aria-label="Resources" data-i18n-aria-label="footer_resources">
+      <h2 data-i18n="footer_resources">Resources</h2>
+      <ul>
+        <li><a href="https://github.com/danhthanh4182/psmgr/issues" rel="noopener noreferrer" data-i18n="footer_links_issues">Issues</a></li>
+        <li><a href="https://github.com/danhthanh4182/psmgr/tree/main/docs" rel="noopener noreferrer" data-i18n="footer_links_docs">Docs</a></li>
+        <li><a href="https://github.com/danhthanh4182/psmgr/blob/main/LICENSE" rel="noopener noreferrer" data-i18n="footer_links_license">MIT License</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container footer-bottom">
+    <p class="footer-copy">&copy; <span id="footer-year">2026</span> PSManager</p>
+    <p class="footer-disclaimer" data-i18n="footer_disclaimer">Not affiliated with Microsoft. PowerShell is a trademark of Microsoft Corporation.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+</body>
+</html>

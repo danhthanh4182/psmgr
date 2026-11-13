@@ -1,0 +1,695 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PowerShell Version Manager (PSManager)"
+        Height="820" Width="1280" MinHeight="680" MinWidth="1024"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource BgBrush}"
+        Foreground="{DynamicResource TextBrush}"
+        FontFamily="{DynamicResource UiFont}"
+        UseLayoutRounding="True">
+    <Window.Resources>
+        <!-- SVG vector geometries (crisp at any DPI, single fill) -->
+        <StreamGeometry x:Key="IconZap">M13 2L3 14h9l-1 8 10-12h-9l1-8z</StreamGeometry>
+        <StreamGeometry x:Key="IconRefresh">M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z</StreamGeometry>
+        <StreamGeometry x:Key="IconGlobe">M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z</StreamGeometry>
+        <StreamGeometry x:Key="IconStar">M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z</StreamGeometry>
+        <StreamGeometry x:Key="IconUndo">M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C20.8 11.03 17.05 8 12.5 8z</StreamGeometry>
+        <StreamGeometry x:Key="IconUpdate">M12 2a10 10 0 0 0-7.07 2.93L3 3v6h6L6.34 6.34A8 8 0 1 1 4 12H2a10 10 0 1 0 10-10zm0 5l-4 4h2.5v5h3v-5H16l-4-4z</StreamGeometry>
+        <StreamGeometry x:Key="IconDownload">M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z</StreamGeometry>
+        <StreamGeometry x:Key="IconSearch">M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z</StreamGeometry>
+        <StreamGeometry x:Key="IconTerminal">M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8h16v10zm-2-1h-6v-2h6v2zm-9.7-3.7L5.7 12l2.6-2.3 1.4 1.4-1.2 1 1.2 1-1.4 1.2z</StreamGeometry>
+        <StreamGeometry x:Key="IconPlay">M8 5v14l11-7z</StreamGeometry>
+        <StreamGeometry x:Key="IconShield">M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z</StreamGeometry>
+        <StreamGeometry x:Key="IconSplit">M3 3v18h18V3H3zm8 16H5V5h6v14zm8 0h-6V5h6v14z</StreamGeometry>
+        <StreamGeometry x:Key="IconEdit">M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z</StreamGeometry>
+        <StreamGeometry x:Key="IconSync">M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z</StreamGeometry>
+        <StreamGeometry x:Key="IconHealth">M10.5 4.5c.28 0 .5.22.5.5v2h2V5c0-.28.22-.5.5-.5s.5.22.5.5v2h2.5c.28 0 .5.22.5.5s-.22.5-.5.5H14v2h2.5c.28 0 .5.22.5.5s-.22.5-.5.5H14v2c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-2h-2v2c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-2H8c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h2.5V8H8c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h2.5V5c0-.28.22-.5.5-.5z M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z</StreamGeometry>
+        <StreamGeometry x:Key="IconWrench">M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z</StreamGeometry>
+        <StreamGeometry x:Key="IconImport">M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z</StreamGeometry>
+        <StreamGeometry x:Key="IconCloud">M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3z</StreamGeometry>
+        <StreamGeometry x:Key="IconCloudUpload">M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z</StreamGeometry>
+        <StreamGeometry x:Key="IconSave">M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z</StreamGeometry>
+        <StreamGeometry x:Key="IconArchive">M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM12 17.5L6.5 12H10v-2h4v2h3.5L12 17.5zM5.12 5l.81-1h12l.94 1H5.12z</StreamGeometry>
+        <StreamGeometry x:Key="IconFileText">M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z</StreamGeometry>
+        <StreamGeometry x:Key="IconCopy">M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z</StreamGeometry>
+        <StreamGeometry x:Key="IconClose">M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z</StreamGeometry>
+        <StreamGeometry x:Key="IconMonitor">M20 3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h6l-2 3v1h8v-1l-2-3h6c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 13H4V5h16v11z</StreamGeometry>
+        <StreamGeometry x:Key="IconLink">M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z</StreamGeometry>
+        <StreamGeometry x:Key="IconPackage">M20 8l-8-5-8 5v8l8 5 8-5V8zm-8-2.7l5.4 3.4-2.5 1.6-5.4-3.4 2.5-1.6zM6.5 9.7L12 13.1v5.7l-5.5-3.4V9.7zm7 8.8v-5.7l5.5-3.4v5.7l-5.5 3.4z</StreamGeometry>
+        <StreamGeometry x:Key="IconHelp">M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z</StreamGeometry>
+        <StreamGeometry x:Key="IconBell">M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z</StreamGeometry>
+    </Window.Resources>
+
+    <Grid Background="{DynamicResource BgBrush}">
+    <Grid MaxWidth="1200" Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Header -->
+            <RowDefinition Height="*"/>    <!-- Body: navigation rail + page -->
+            <RowDefinition Height="8"/>    <!-- Splitter -->
+            <RowDefinition Height="220" MinHeight="120"/> <!-- Activity log -->
+        </Grid.RowDefinitions>
+
+        <!-- ================= Header ================= -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Row="0" Grid.Column="0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Path Data="{StaticResource IconZap}" Fill="{DynamicResource AccentBrush}" Width="22" Height="22" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="PSManager" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource AccentBrush}" VerticalAlignment="Center"/>
+                    <Border Style="{DynamicResource Chip}" Margin="12,2,0,0" VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtVersion" Text="v—" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource AccentBrush}"/>
+                    </Border>
+                </StackPanel>
+                <TextBlock x:Name="TxtSubtitle" Text="PowerShell Version Manager &amp; Control Center" FontSize="13" Foreground="{DynamicResource TextDimBrush}" Margin="30,2,0,0"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button x:Name="BtnHelp" Style="{DynamicResource Btn}" Width="34" Height="32" Padding="0" Margin="0,0,8,0">
+                    <Path Data="{StaticResource IconHelp}" Fill="{DynamicResource TextDimBrush}" Width="14" Height="14" Stretch="Uniform"/>
+                </Button>
+                <Button x:Name="BtnNotifications" Style="{DynamicResource Btn}" Width="38" Height="32" Padding="0" Margin="0,0,8,0">
+                    <Grid>
+                        <Path Data="{StaticResource IconBell}" Fill="{DynamicResource TextDimBrush}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border x:Name="NotifBadge" Background="{DynamicResource DangerBrush}" CornerRadius="7" MinWidth="14" Height="14" Padding="3,0" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-3,-3,0" Visibility="Collapsed">
+                            <TextBlock x:Name="TxtNotifBadge" Text="0" FontSize="9" FontWeight="Bold" Foreground="{DynamicResource BgBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Button>
+                <Button x:Name="BtnRefresh" Style="{DynamicResource Btn}" Width="34" Height="32" Padding="0" Margin="0,0,8,0">
+                    <Path Data="{StaticResource IconRefresh}" Fill="{DynamicResource TextDimBrush}" Width="14" Height="14" Stretch="Uniform"/>
+                </Button>
+                <Button x:Name="BtnLangToggle" Style="{DynamicResource Btn}" Margin="0,0,8,0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconGlobe}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtLangToggle" Text="English" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="BtnLaunchTUI" Style="{DynamicResource Btn}">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconTerminal}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtBtnLaunchTUI" Text="Open TUI Console" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <ProgressBar x:Name="PrgBusy" Grid.Row="1" Grid.ColumnSpan="2" Height="3" IsIndeterminate="True"
+                         Background="Transparent" Foreground="{DynamicResource AccentBrush}" BorderThickness="0"
+                         Visibility="Collapsed" Margin="0,8,0,0"/>
+        </Grid>
+
+        <!-- ================= Body: navigation rail + page ================= -->
+        <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Navigation rail -->
+                <Border Grid.Column="0" Style="{DynamicResource Panel}" Padding="8" Margin="0,0,12,0" VerticalAlignment="Top">
+                    <StackPanel>
+                        <RadioButton x:Name="NavOverview" AutomationProperties.Name="{Binding Text, ElementName=TxtNavOverview}" Style="{DynamicResource NavItem}" GroupName="Nav" Tag="overview" IsChecked="True" Margin="0,0,0,2">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconMonitor}" Fill="{DynamicResource TextDimBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="TxtNavOverview" Text="Overview"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton x:Name="NavUpdate" AutomationProperties.Name="{Binding Text, ElementName=TxtNavUpdate}" Style="{DynamicResource NavItem}" GroupName="Nav" Tag="update" Margin="0,0,0,2">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconUpdate}" Fill="{DynamicResource TextDimBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="TxtNavUpdate" Text="Update"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton x:Name="NavBackup" AutomationProperties.Name="{Binding Text, ElementName=TxtNavBackup}" Style="{DynamicResource NavItem}" GroupName="Nav" Tag="backup" Margin="0,0,0,2">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconArchive}" Fill="{DynamicResource TextDimBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="TxtNavBackup" Text="Backup"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton x:Name="NavHealth" AutomationProperties.Name="{Binding Text, ElementName=TxtNavHealth}" Style="{DynamicResource NavItem}" GroupName="Nav" Tag="health" Margin="0,0,0,2">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconHealth}" Fill="{DynamicResource TextDimBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="TxtNavHealth" Text="Health"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton x:Name="NavProfile" AutomationProperties.Name="{Binding Text, ElementName=TxtNavProfile}" Style="{DynamicResource NavItem}" GroupName="Nav" Tag="profile">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconFileText}" Fill="{DynamicResource TextDimBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="TxtNavProfile" Text="Profiles"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton x:Name="NavHelp" AutomationProperties.Name="{Binding Text, ElementName=TxtNavHelp}" Style="{DynamicResource NavItem}" GroupName="Nav" Tag="help" Margin="0,2,0,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconHelp}" Fill="{DynamicResource TextDimBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="TxtNavHelp" Text="Help"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </StackPanel>
+                </Border>
+
+                <!-- Page host: one page visible at a time -->
+                <Grid Grid.Column="1">
+                    <!-- ===== Overview ===== -->
+                    <Grid x:Name="PageOverview" Visibility="Visible">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+                            <StackPanel>
+                                <UniformGrid Columns="4" Margin="0,0,0,16">
+                                    <Border Style="{DynamicResource Panel}" Padding="14" Margin="0,0,8,0">
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                <Path Data="{StaticResource IconTerminal}" Fill="{DynamicResource TextDimBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="LblCardDefault" Text="Default shell" Style="{DynamicResource Caption}"/>
+                                            </StackPanel>
+                                            <TextBlock x:Name="CardWTDefault" Text="—" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" Margin="0,2,0,0"/>
+                                            <TextBlock x:Name="CardWTSub" Text="" Style="{DynamicResource Caption}" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Style="{DynamicResource Panel}" Padding="14" Margin="4,0,4,0">
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                <Path Data="{StaticResource IconMonitor}" Fill="{DynamicResource TextDimBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="LblCardHost" Text="Terminal host" Style="{DynamicResource Caption}"/>
+                                            </StackPanel>
+                                            <TextBlock x:Name="CardHost" Text="—" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" Margin="0,2,0,0"/>
+                                            <TextBlock x:Name="CardHostSub" Text="" Style="{DynamicResource Caption}" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Style="{DynamicResource Panel}" Padding="14" Margin="4,0,4,0">
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                <Path Data="{StaticResource IconLink}" Fill="{DynamicResource TextDimBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="LblCardShim" Text="Command shim" Style="{DynamicResource Caption}"/>
+                                            </StackPanel>
+                                            <TextBlock x:Name="CardShim" Text="—" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" Margin="0,2,0,0"/>
+                                            <TextBlock x:Name="CardShimSub" Text="" Style="{DynamicResource Caption}" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Style="{DynamicResource Panel}" Padding="14" Margin="8,0,0,0">
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                <Path Data="{StaticResource IconPackage}" Fill="{DynamicResource TextDimBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="LblCardSource" Text="Update source" Style="{DynamicResource Caption}"/>
+                                            </StackPanel>
+                                            <TextBlock x:Name="CardSource" Text="—" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" Margin="0,2,0,0"/>
+                                            <TextBlock x:Name="CardSourceSub" Text="" Style="{DynamicResource Caption}" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </UniformGrid>
+
+                                <Border Style="{DynamicResource Panel}" Padding="16" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock x:Name="LblSecDefault" Text="Default shell" Style="{DynamicResource SectionTitle}"/>
+                                        <Button x:Name="BtnSetDefaultPS7" Style="{DynamicResource BtnPrimary}" Margin="0,0,0,8">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconStar}" Fill="{DynamicResource OnAccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnSetDefaultPS7" Text="Set PS7 as Default" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapDefaultPS7" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,10"/>
+                                        <Button x:Name="BtnRestorePS5" Style="{DynamicResource Btn}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconUndo}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnRestorePS5" Text="Revert to PS5" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapRestorePS5" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{DynamicResource Panel}" Padding="16">
+                                    <StackPanel>
+                                        <TextBlock x:Name="LblQuickLaunch" Text="Quick launch" Style="{DynamicResource SectionTitle}"/>
+                                        <UniformGrid Columns="2">
+                                            <Button x:Name="BtnLaunchPS7" Style="{DynamicResource Btn}" Margin="0,0,4,8">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Path Data="{StaticResource IconPlay}" Fill="{DynamicResource OkBrush}" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <TextBlock x:Name="TxtBtnLaunchPS7" Text="Launch PS7" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button x:Name="BtnLaunchPS7Admin" Style="{DynamicResource Btn}" Margin="4,0,0,8">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Path Data="{StaticResource IconShield}" Fill="{DynamicResource WarnBrush}" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <TextBlock x:Name="TxtBtnLaunchPS7Admin" Text="Launch PS7 (Admin)" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button x:Name="BtnLaunchSplit" Style="{DynamicResource Btn}" Margin="0,0,4,0">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Path Data="{StaticResource IconSplit}" Fill="{DynamicResource AccentBrush}" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <TextBlock x:Name="TxtBtnLaunchSplit" Text="Split View (PS7+PS5)" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button x:Name="BtnLaunchPS5" Style="{DynamicResource Btn}" Margin="4,0,0,0">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Path Data="{StaticResource IconZap}" Fill="{DynamicResource WarnBrush}" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <TextBlock x:Name="TxtBtnLaunchPS5" Text="Launch PS5" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </UniformGrid>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+
+                    <!-- ===== Update ===== -->
+                    <Grid x:Name="PageUpdate" Visibility="Collapsed">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+                            <StackPanel>
+                                <Border Style="{DynamicResource Panel}" Padding="16" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock x:Name="LblSecMaint" Text="Maintenance" Style="{DynamicResource SectionTitle}"/>
+                                        <Button x:Name="BtnUpdate" Style="{DynamicResource BtnPrimary}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconUpdate}" Fill="{DynamicResource OnAccentBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnUpdate" Text="Update PowerShell" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapUpdate" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,12"/>
+                                        <Button x:Name="BtnInstall" Style="{DynamicResource Btn}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconDownload}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnInstall" Text="Install PowerShell" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapInstall" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{DynamicResource Panel}" Padding="16" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock x:Name="LblSecSource" Text="Update source &amp; channel" Style="{DynamicResource SectionTitle}"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                            <TextBlock x:Name="LblSource" Text="Source" Style="{DynamicResource FieldLabel}"/>
+                                            <Border Style="{DynamicResource Panel}" Padding="2" Background="{DynamicResource RaisedBrush}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <RadioButton x:Name="BtnSrcWinget" Style="{DynamicResource Segment}" GroupName="Src" Tag="winget" Content="winget" Margin="0,0,2,0"/>
+                                                    <RadioButton x:Name="BtnSrcMsstore" Style="{DynamicResource Segment}" GroupName="Src" Tag="msstore" Content="msstore" Margin="0,0,2,0"/>
+                                                    <RadioButton x:Name="BtnSrcGithub" Style="{DynamicResource Segment}" GroupName="Src" Tag="github" Content="github"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock x:Name="LblChannel" Text="Channel" Style="{DynamicResource FieldLabel}"/>
+                                            <Border Style="{DynamicResource Panel}" Padding="2" Background="{DynamicResource RaisedBrush}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <RadioButton x:Name="BtnChStable" Style="{DynamicResource Segment}" GroupName="Ch" Tag="stable" Content="stable" Margin="0,0,2,0"/>
+                                                    <RadioButton x:Name="BtnChPreview" Style="{DynamicResource Segment}" GroupName="Ch" Tag="preview" Content="preview" Margin="0,0,2,0"/>
+                                                    <RadioButton x:Name="BtnChLts" Style="{DynamicResource Segment}" GroupName="Ch" Tag="lts" Content="lts"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{DynamicResource Panel}" Padding="16" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock x:Name="LblSecTools" Text="Sync &amp; tools" Style="{DynamicResource SectionTitle}"/>
+                                        <Button x:Name="BtnSyncNow" Style="{DynamicResource Btn}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconSync}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnSyncNow" Text="Sync Now (links + packages)" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapSyncNow" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{DynamicResource Panel}" Padding="16">
+                                    <StackPanel>
+                                        <TextBlock x:Name="LblSecPkg" Text="Winget sources &amp; maintenance" Style="{DynamicResource SectionTitle}"/>
+                                        <Button x:Name="BtnSyncSources" Style="{DynamicResource Btn}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconCloud}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnSyncSources" Text="Sync Winget Sources" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapSyncSources" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+
+                    <!-- ===== Backup ===== -->
+                    <Grid x:Name="PageBackup" Visibility="Collapsed">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+                            <StackPanel>
+                                <Border Style="{DynamicResource Panel}" Padding="16" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <Button x:Name="BtnBackupProfiles" Style="{DynamicResource BtnPrimary}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconSave}" Fill="{DynamicResource OnAccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnBackupProfiles" Text="Backup Profiles" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapBackupProfiles" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,12"/>
+
+                                        <Button x:Name="BtnRestoreBackup" Style="{DynamicResource Btn}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconArchive}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnRestoreBackup" Text="Restore Backup" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapRestoreBackup" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,12"/>
+
+                                        <Button x:Name="BtnBackupCloud" Style="{DynamicResource Btn}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconCloudUpload}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnBackupCloud" Text="Backup to Cloud" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapBackupCloud" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,12"/>
+                                        <Button x:Name="BtnSetCloudRepo" Style="{DynamicResource Btn}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconCloudUpload}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnSetCloudRepo" Text="Set Backup Repo" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapSetCloudRepo" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,12"/>
+
+                                        <Button x:Name="BtnDeleteBackups" Style="{DynamicResource BtnDanger}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconClose}" Fill="{DynamicResource DangerBrush}" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnDeleteBackups" Text="Delete Backups" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapDeleteBackups" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+
+                    <!-- ===== Health ===== -->
+                    <Grid x:Name="PageHealth" Visibility="Collapsed">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+                            <StackPanel>
+                                <Border Style="{DynamicResource Panel}" Padding="16">
+                                    <StackPanel>
+                                        <Button x:Name="BtnDoctorAudit" Style="{DynamicResource BtnPrimary}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconHealth}" Fill="{DynamicResource OnAccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnDoctorAudit" Text="Doctor Audit" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapDoctorAudit" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,12"/>
+
+                                        <Button x:Name="BtnDoctorFix" Style="{DynamicResource Btn}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconWrench}" Fill="{DynamicResource WarnBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnDoctorFix" Text="Doctor Fix All" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapDoctorFix" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,12"/>
+
+                                        <Button x:Name="BtnDiagnostics" Style="{DynamicResource Btn}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconSearch}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnDiagnostics" Text="Run Diagnostics" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapDiagnostics" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+
+                    <!-- ===== Profiles ===== -->
+                    <Grid x:Name="PageProfile" Visibility="Collapsed">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+                            <StackPanel>
+                                <Border Style="{DynamicResource Panel}" Padding="16">
+                                    <StackPanel>
+                                        <Button x:Name="BtnAuditProfiles" Style="{DynamicResource BtnPrimary}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconHealth}" Fill="{DynamicResource OnAccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnAuditProfiles" Text="Audit Profiles" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapAuditProfiles" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,12"/>
+
+                                        <Button x:Name="BtnEditProfile" Style="{DynamicResource Btn}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconEdit}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnEditProfile" Text="Edit Profiles (VS Code/Notepad)" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapEditProfile" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,12"/>
+
+                                        <Button x:Name="BtnAdoptProfiles" Style="{DynamicResource Btn}" Margin="0,0,0,6">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Path Data="{StaticResource IconImport}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtBtnAdoptProfiles" Text="Adopt Current Profiles" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <TextBlock x:Name="TxtCapAdoptProfiles" Text="" Style="{DynamicResource Caption}" Margin="2,0,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+
+                    <!-- ===== Help & About ===== -->
+                    <Grid x:Name="PageHelp" Visibility="Collapsed">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+                            <StackPanel>
+                                <Border Style="{DynamicResource Panel}" Padding="16" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock x:Name="TxtHelpTitle" Text="Help &amp; About" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                                        <TextBlock x:Name="TxtHelpSubtitle" Text="" Style="{DynamicResource Caption}" Margin="0,2,0,10"/>
+                                        <Border Style="{DynamicResource Chip}" HorizontalAlignment="Left" Margin="0,0,0,10">
+                                            <TextBlock x:Name="TxtHelpVersion" Text="v-" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource AccentBrush}"/>
+                                        </Border>
+                                        <TextBlock x:Name="TxtHelpIntro" Text="" Style="{DynamicResource Caption}" Margin="0,0,0,12"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button x:Name="BtnCheckUpdate" Style="{DynamicResource BtnPrimary}" Margin="0,0,8,0">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Path Data="{StaticResource IconRefresh}" Fill="{DynamicResource OnAccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <TextBlock x:Name="TxtBtnCheckUpdate" Text="Check for updates" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button x:Name="BtnInstallUpdate" Style="{DynamicResource Btn}" IsEnabled="False" Margin="0,0,8,0">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Path Data="{StaticResource IconDownload}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <TextBlock x:Name="TxtBtnInstallUpdate" Text="Install update" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button x:Name="BtnOpenRelease" Style="{DynamicResource Btn}">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Path Data="{StaticResource IconLink}" Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                    <TextBlock x:Name="TxtBtnOpenRelease" Text="View release" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
+                                        <TextBlock x:Name="TxtCapCheckUpdate" Text="" Style="{DynamicResource Caption}" Margin="2,8,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{DynamicResource Panel}" Padding="16" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock x:Name="LblHelpQuickStart" Text="Quick start" Style="{DynamicResource SectionTitle}"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                                <TextBlock x:Name="TxtHelpQuickDefault" Text="" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap"/>
+                                                <TextBlock x:Name="TxtHelpQuickDefaultDesc" Text="" Style="{DynamicResource Caption}" Margin="0,4,0,0"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                                                <TextBlock x:Name="TxtHelpQuickSync" Text="" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap"/>
+                                                <TextBlock x:Name="TxtHelpQuickSyncDesc" Text="" Style="{DynamicResource Caption}" Margin="0,4,0,0"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="2">
+                                                <TextBlock x:Name="TxtHelpQuickUpdate" Text="" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap"/>
+                                                <TextBlock x:Name="TxtHelpQuickUpdateDesc" Text="" Style="{DynamicResource Caption}" Margin="0,4,0,0"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{DynamicResource Panel}" Padding="16" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock x:Name="LblHelpCommands" Text="Command reference" Style="{DynamicResource SectionTitle}"/>
+                                        <StackPanel x:Name="HelpCommandList"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{DynamicResource Panel}" Padding="16" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock x:Name="LblHelpUpdate" Text="PSManager update" Style="{DynamicResource SectionTitle}"/>
+                                        <TextBlock x:Name="TxtHelpUpdateStatus" Text="" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap"/>
+                                        <TextBlock x:Name="TxtHelpUpdateDetail" Text="" Style="{DynamicResource Caption}" Margin="0,4,0,0"/>
+                                        <TextBlock x:Name="TxtHelpUpdateChecked" Text="" Style="{DynamicResource Caption}" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{DynamicResource Panel}" Padding="16" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock x:Name="LblHelpShortcuts" Text="Keyboard shortcuts" Style="{DynamicResource SectionTitle}"/>
+                                        <TextBlock x:Name="TxtHelpShortcuts" Text="" FontFamily="{DynamicResource MonoFont}" FontSize="12" Foreground="{DynamicResource TextDimBrush}" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{DynamicResource Panel}" Padding="16" Margin="0,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock x:Name="LblHelpLinks" Text="Project" Style="{DynamicResource SectionTitle}"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button x:Name="BtnOpenDocs" Style="{DynamicResource Btn}" Margin="0,0,8,0">
+                                                <TextBlock x:Name="TxtBtnOpenDocs" Text="Documentation"/>
+                                            </Button>
+                                            <Button x:Name="BtnOpenRepo" Style="{DynamicResource Btn}" Margin="0,0,8,0">
+                                                <TextBlock x:Name="TxtBtnOpenRepo" Text="Source code"/>
+                                            </Button>
+                                            <Button x:Name="BtnOpenIssues" Style="{DynamicResource Btn}" Margin="0,0,8,0">
+                                                <TextBlock x:Name="TxtBtnOpenIssues" Text="Report an issue"/>
+                                            </Button>
+                                            <Button x:Name="BtnOpenLicense" Style="{DynamicResource Btn}">
+                                                <TextBlock x:Name="TxtBtnOpenLicense" Text="MIT License"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{DynamicResource Panel}" Padding="16">
+                                    <StackPanel>
+                                        <TextBlock x:Name="LblHelpAbout" Text="About" Style="{DynamicResource SectionTitle}"/>
+                                        <TextBlock x:Name="TxtHelpAbout" Text="" Style="{DynamicResource Caption}"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- ================= Splitter ================= -->
+        <GridSplitter Grid.Row="2" Height="8" HorizontalAlignment="Stretch" Margin="0,4,0,4"
+                      Background="Transparent" Cursor="SizeNS" FocusVisualStyle="{DynamicResource FocusRing}"
+                      ResizeBehavior="PreviousAndNext" ResizeDirection="Auto" ShowsPreview="False"/>
+
+        <!-- ================= Activity log ================= -->
+        <Grid Grid.Row="3">
+                <Border Style="{DynamicResource Panel}" Padding="12">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconFileText}" Fill="{DynamicResource TextDimBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="LblLog" Text="Activity log" Style="{DynamicResource SectionTitle}" Margin="0"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="TxtStatusHint" Text=" — Ready" FontSize="12" Foreground="{DynamicResource OkBrush}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                <Button x:Name="BtnCancelAction" Style="{DynamicResource BtnDanger}" FontSize="12" Padding="10,2" Margin="10,0,0,0" Visibility="Collapsed">
+                                    <TextBlock Text="Cancel"/>
+                                </Button>
+                            </StackPanel>
+
+                            <Grid Grid.Column="2" Width="150" Height="24" Margin="0,0,8,0">
+                                <TextBox x:Name="TxtLogFilter" Style="{DynamicResource Input}"/>
+                                <TextBlock x:Name="TxtLogFilterHint" Text="Filter log..." IsHitTestVisible="False"
+                                           Foreground="{DynamicResource TextDimBrush}" FontSize="11"
+                                           Margin="7,0,0,0" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <Button x:Name="BtnLogCopy" Grid.Column="3" Style="{DynamicResource Btn}" Width="30" Height="26" Padding="0" Margin="0,0,6,0">
+                                <Path Data="{StaticResource IconCopy}" Fill="{DynamicResource TextDimBrush}" Width="12" Height="12" Stretch="Uniform"/>
+                            </Button>
+                            <Button x:Name="BtnLogClear" Grid.Column="4" Style="{DynamicResource Btn}" Width="30" Height="26" Padding="0" Margin="0,0,6,0">
+                                <Path Data="{StaticResource IconClose}" Fill="{DynamicResource TextDimBrush}" Width="12" Height="12" Stretch="Uniform"/>
+                            </Button>
+                            <Button x:Name="BtnViewLogs" Grid.Column="5" Style="{DynamicResource Btn}" Padding="10,4">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource IconFileText}" Fill="{DynamicResource TextDimBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="TxtBtnViewLogs" Text="View Logs" FontSize="12" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+
+                        <RichTextBox x:Name="RtbConsoleLog" Grid.Row="1"
+                                     Background="Transparent" BorderThickness="0"
+                                     Foreground="{DynamicResource TextDimBrush}"
+                                     FontFamily="{DynamicResource MonoFont}" FontSize="12"
+                                     IsReadOnly="True" IsDocumentEnabled="True"
+                                     FocusVisualStyle="{DynamicResource FocusRing}"
+                                     VerticalScrollBarVisibility="Auto"/>
+                    </Grid>
+                </Border>
+                </Grid>
+            </Grid>
+
+    <!-- ================= Notification center (overlay) ================= -->
+    <Border x:Name="NotifPanel" Panel.ZIndex="20" Width="390" MaxHeight="520" Visibility="Collapsed"
+            HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,64,28,0"
+            Style="{DynamicResource Panel}" Padding="14">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="TxtNotifTitle" Text="Notifications" Style="{DynamicResource SectionTitle}" Margin="0" VerticalAlignment="Center"/>
+                <Button x:Name="BtnNotifClear" Grid.Column="1" Style="{DynamicResource Btn}" FontSize="12" Padding="10,2" Margin="0,0,6,0">
+                    <TextBlock Text="Clear all"/>
+                </Button>
+                <Button x:Name="BtnNotifClose" Grid.Column="2" Style="{DynamicResource Btn}" Width="30" Height="26" Padding="0">
+                    <Path Data="{StaticResource IconClose}" Fill="{DynamicResource TextDimBrush}" Width="12" Height="12" Stretch="Uniform"/>
+                </Button>
+            </Grid>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" MaxHeight="420" Margin="0,10,0,0">
+                <StackPanel x:Name="NotifList"/>
+            </ScrollViewer>
+            <TextBlock x:Name="TxtNotifEmpty" Grid.Row="2" Text="No notifications yet." Style="{DynamicResource Caption}" Visibility="Collapsed" Margin="0,8,0,0"/>
+        </Grid>
+    </Border>
+
+    <!-- ================= In-app toast (overlay) ================= -->
+    <Border x:Name="ToastPanel" Panel.ZIndex="21" Width="360" Visibility="Collapsed"
+            HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,28,28"
+            Style="{DynamicResource Panel}" Padding="14">
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="TxtToastTitle" Text="" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                <Button x:Name="BtnToastClose" Grid.Column="1" Style="{DynamicResource Btn}" Width="30" Height="26" Padding="0" Margin="8,0,0,0">
+                    <Path Data="{StaticResource IconClose}" Fill="{DynamicResource TextDimBrush}" Width="12" Height="12" Stretch="Uniform"/>
+                </Button>
+            </Grid>
+            <TextBlock x:Name="TxtToastMessage" Text="" Style="{DynamicResource Caption}" Margin="0,6,0,0"/>
+        </StackPanel>
+    </Border>
+    </Grid>
+</Window>

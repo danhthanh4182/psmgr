@@ -1,0 +1,50 @@
+{
+  "$schema": "https://raw.githubusercontent.com/danhthanh4182/psmgr/main/schema/v1.json",
+  "version": "1.0.0",
+  "packages": {
+    "winget": [
+      { "id": "Microsoft.PowerShell", "source": "winget" },
+      { "id": "Microsoft.WindowsTerminal", "source": "winget" },
+      { "id": "Git.Git", "source": "winget" }
+    ],
+    "scoop": {
+      "buckets": [
+        "extras",
+        "nerd-fonts"
+      ],
+      "apps": [
+        "starship",
+        "fnm",
+        "fzf",
+        "ripgrep",
+        "jq",
+        "zoxide"
+      ]
+    },
+    "psgallery": [
+      { "name": "PSReadLine", "minVersion": "2.3.4", "scope": "CurrentUser" },
+      { "name": "Terminal-Icons", "scope": "CurrentUser" },
+      { "name": "posh-git", "scope": "CurrentUser" }
+    ]
+  },
+  "links": [
+    {
+      "source": "profiles/master_profile.ps1",
+      "targets": [
+        "~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1",
+        "~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
+      ],
+      "type": "hardlink"
+    },
+    {
+      "source": "configs/starship.toml",
+      "targets": [
+        "~/.config/starship.toml"
+      ],
+      "type": "hardlink"
+    }
+  ],
+  "env": {
+    "STARSHIP_CONFIG": "~/.config/starship.toml"
+  }
+}

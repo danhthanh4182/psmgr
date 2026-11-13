@@ -1,0 +1,19 @@
+# Repository-wide normalization: keep sources LF in the index and worktree so
+# shell hooks and PowerShell scripts behave identically on every host.
+* text=auto eol=lf
+
+# Git/agent hooks are executed by sh; a stray CR breaks parsing.
+.agents/hooks/* text eol=lf
+*.sh            text eol=lf
+
+# PowerShell sources are LF in this repo (both engines accept LF).
+*.ps1           text eol=lf
+*.psm1          text eol=lf
+*.psd1          text eol=lf
+
+# Binary assets must never be converted.
+*.png           binary
+*.ico           binary
+*.svgz          binary
+*.zip           binary
+*.enc           binary

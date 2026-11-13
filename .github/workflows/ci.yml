@@ -1,0 +1,57 @@
+name: PSManager CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Lint & Test Suite (Windows)
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shell: [powershell, pwsh]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+          if (-not (Get-PackageProvider -Name NuGet -ListAvailable -ErrorAction SilentlyContinue)) {
+            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope CurrentUser
+          }
+          if (-not (Get-Module -ListAvailable -Name PSScriptAnalyzer)) {
+            Install-Module -Name PSScriptAnalyzer -Scope CurrentUser -Force -SkipPublisherCheck
+          }
+
+      - name: Lint (PSScriptAnalyzer)
+        shell: pwsh
+        run: |
+          $res = Invoke-ScriptAnalyzer -Path . -Settings ./PSScriptAnalyzerSettings.psd1 -Recurse
+          $issues = @($res | Where-Object { $_.Severity -in 'Error', 'Warning' })
+          $issues | ForEach-Object {
+            Write-Host ("{0}:{1} [{2}] {3} - {4}" -f $_.ScriptName, $_.Line, $_.RuleName, $_.Severity, $_.Message)
+          }
+          if ($issues.Count -gt 0) {
+            Write-Host "::error::PSScriptAnalyzer found $($issues.Count) issue(s)"
+            exit 1
+          }
+
+      - name: Run Test Harness (PowerShell 5.1)
+        if: matrix.shell == 'powershell'
+        shell: powershell
+        run: ./tests/harness.ps1
+
+      - name: Run Test Harness (PowerShell 7)
+        if: matrix.shell == 'pwsh'
+        shell: pwsh
+        run: ./tests/harness.ps1

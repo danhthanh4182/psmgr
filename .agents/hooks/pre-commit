@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# PSManager Pre-Commit Hook
+# Fast gate: executes AST syntax linting, manifest, parity contract & automation invariants.
+# ==============================================================================
+
+echo "==> Running PSManager Pre-Commit Test Suite..."
+export PSMGR_SKIP_BUILDER_TESTS=1
+
+if command -v pwsh >/dev/null 2>&1; then
+    pwsh -NoProfile -ExecutionPolicy Bypass -File tests/Run-Tests.ps1 -Fast
+elif command -v pwsh.exe >/dev/null 2>&1; then
+    pwsh.exe -NoProfile -ExecutionPolicy Bypass -File tests/Run-Tests.ps1 -Fast
+elif command -v powershell.exe >/dev/null 2>&1; then
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File tests/Run-Tests.ps1 -Fast
+elif command -v powershell >/dev/null 2>&1; then
+    powershell -NoProfile -ExecutionPolicy Bypass -File tests/Run-Tests.ps1 -Fast
+else
+    echo "PowerShell not found. Skipping hook."
+    exit 0
+fi
+
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+    echo "❌ Pre-commit validation failed! Please fix issues before committing."
+    exit 1
+fi
+
+echo "✅ Pre-commit validation passed."
+exit 0

@@ -1,0 +1,37 @@
+# PowerShell & Windows
+*.log
+logs/
+*.tmp
+*.bak
+*~
+Thumbs.db
+desktop.ini
+
+# VS Code & IDE
+.vscode/
+.idea/
+
+# Testing output
+TestResults/
+
+# PSManager Backups
+backups/
+*.zip
+
+# Local GUI window state
+gui_state.json
+
+# Timestamped .bak variants (*.bak.20261028_192618)
+*.bak.*
+
+# Code-signing material: never commit private keys
+certs/
+*.pfx
+*.snk
+
+# Local build artifacts & watchdog
+WATCHDOG.yml
+dist/
+
+# Machine-local overrides
+local.ps1
